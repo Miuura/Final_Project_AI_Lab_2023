@@ -28,10 +28,6 @@ df = pd.get_dummies(df, columns=['Address'])
 df.replace(True, 1, inplace=True)
 df.replace(False, 0, inplace=True)
 
-X = df.drop(columns = 'Price')
-y = df['Price']
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 1)
-
 model = joblib.load("catboost_moodel.joblib")
 
 def preprocessing(data):

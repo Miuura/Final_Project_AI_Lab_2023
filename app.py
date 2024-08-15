@@ -1,8 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from catboost import CatBoostRegressor
-from sklearn.model_selection import train_test_split
+import joblib
 
 df = pd.read_csv('Pricing.csv')
 address = df['Address'].unique().tolist()
@@ -33,8 +32,7 @@ X = df.drop(columns = 'Price')
 y = df['Price']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 1)
 
-model = CatBoostRegressor(random_state= 1 , iterations= 1000, learning_rate= 0.1)
-model.fit(X_train, y_train)
+model = joblib.load("catboost_moodel.joblib")
 
 def preprocessing(data):
     data = pd.get_dummies(data, columns=['Address'])

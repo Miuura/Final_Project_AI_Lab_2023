@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import pickle
+from catboost import CatBoostRegressor
 
 df = pd.read_csv('Pricing.csv')
 address = df['Address'].unique().tolist()
@@ -28,8 +29,8 @@ df = pd.get_dummies(df, columns=['Address'])
 df.replace(True, 1, inplace=True)
 df.replace(False, 0, inplace=True)
 
-with open('catboostModel.pkl', 'rb') as file:
-    model = pickle.load(file)
+model = CatBoostRegressor()
+model.load_model('catboost.cbm')
 
 def preprocessing(data):
     data = pd.get_dummies(data, columns=['Address'])

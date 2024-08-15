@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import joblib
+import pickle
 
 df = pd.read_csv('Pricing.csv')
 address = df['Address'].unique().tolist()
@@ -28,7 +28,8 @@ df = pd.get_dummies(df, columns=['Address'])
 df.replace(True, 1, inplace=True)
 df.replace(False, 0, inplace=True)
 
-model = joblib.load("catboost_moodel.joblib")
+with open('catboostModel.pkl', 'rb') as file:
+    model = pickle.load(file)
 
 def preprocessing(data):
     data = pd.get_dummies(data, columns=['Address'])

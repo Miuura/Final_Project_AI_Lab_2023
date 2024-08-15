@@ -1,14 +1,40 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import joblib
+from catboost import CatBoostRegressor
+from sklearn.model_selection import train_test_split
 
 df = pd.read_csv('Pricing.csv')
 address = df['Address'].unique().tolist()
 df = pd.get_dummies(df, columns=['Address'])
 columns = df.columns
 
-model = joblib.load('catboost_moodel.joblib')
+df = pd.read_csv('Pricing.csv')
+df.drop('Price(USD)', axis=1, inplace=True)
+df = df.drop_duplicates()
+df['Area'] = df['Area'].str.replace(',','')
+df['Area'] = df['Area'].astype(float)
+df.dropna(inplace=True)
+def batasAtas(data):
+    Q1 = data.quantile(0.25)
+    Q3 = data.quantile(0.75)
+    IQR = Q3 - Q1
+    upper = Q3 + 1.5 * IQR
+
+    return upper
+
+df = df[df['Area'] < batasAtas(df['Area'])]
+df = df[df['Price'] < batasAtas(df['Price'])]
+df = pd.get_dummies(df, columns=['Address'])
+df.replace(True, 1, inplace=True)
+df.replace(False, 0, inplace=True)
+
+X = df.drop(columns = 'Price')
+y = df['Price']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 1)
+
+model = CatBoostRegressor(random_state= 1 , iterations= 1000, learning_rate= 0.1)
+model.fit(X_train, y_train)
 
 def preprocessing(data):
     data = pd.get_dummies(data, columns=['Address'])

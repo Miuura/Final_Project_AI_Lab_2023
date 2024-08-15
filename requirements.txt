@@ -1,5 +1,5 @@
 catboost
-joblib
 pandas
 numpy
 streamlit
+sklearn

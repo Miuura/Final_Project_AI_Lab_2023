@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import pickle
-import catboost
 
 df = pd.read_csv('Pricing.csv')
 address = df['Address'].unique().tolist()

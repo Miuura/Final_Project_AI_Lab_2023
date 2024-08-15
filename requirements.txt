@@ -2,4 +2,4 @@ catboost
 pandas
 numpy
 streamlit
-sklearn
+scikit-learn
